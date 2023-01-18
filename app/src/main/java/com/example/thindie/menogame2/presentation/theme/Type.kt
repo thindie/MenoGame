@@ -14,73 +14,72 @@ private val regular = Font(R.font.dsm, FontWeight.W400)
 private val medium = Font(R.font.dsm, FontWeight.W500)
 private val semibold = Font(R.font.dsm, FontWeight.W600)
 
-private val TheMathGame = FontFamily(fonts = listOf(light, regular, medium, semibold))
-
+private val MenoGame2Theme = FontFamily(fonts = listOf(light, regular, medium, semibold))
 
 
 val TheMathGameTypo = Typography(
     displayLarge = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W300,
         fontSize = 96.sp
     ),
     displayMedium = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W400,
         fontSize = 60.sp
     ),
     displaySmall = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W600,
         fontSize = 48.sp
     ),
     headlineLarge = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W600,
         fontSize = 34.sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W600,
         fontSize = 24.sp
     ),
     headlineSmall = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W400,
         fontSize = 20.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W500,
         fontSize = 16.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W600,
         fontSize = 14.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W600,
         fontSize = 16.sp
     ),
     bodyLarge = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W400,
         fontSize = 14.sp
     ),
     labelLarge = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W600,
         fontSize = 14.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W500,
         fontSize = 12.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = TheMathGame,
+        fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W400,
         fontSize = 12.sp
     )
