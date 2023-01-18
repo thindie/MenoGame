@@ -1,12 +1,16 @@
 package com.example.thindie.menogame2.data.engine.logic
 
-import com.example.thindie.menogame2.data.engine.EngineLogicRepository
 import com.example.thindie.menogame2.domain.entities.GameQuestion
 import com.example.thindie.menogame2.domain.entities.GameSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class QuestionLogic private constructor(private val engineLogicRepository: EngineLogicRepository) {
+class QuestionLogic @Inject constructor() {
+
+    private val _list: MutableList<GameQuestion<Long>> = mutableListOf()
+    val gameQuestion: List<GameQuestion<Long>>
+        get() = _list
 
     suspend fun generateQuestion(gameSettings: GameSettings<Long>) {
         withContext(Dispatchers.IO) {
@@ -21,19 +25,11 @@ class QuestionLogic private constructor(private val engineLogicRepository: Engin
             val question = GameQuestion(
                 fields = fields,
                 roundTime = gameSettings.roundTime,
-                rightAnswers = gameSettings.rightAnswers
+                rightAnswers = gameSettings.rightAnswers,
+                answerTime = gameSettings.answerTime
             )
-            engineLogicRepository.sendGameData(question)
+            _list.add(question)
         }
 
-    }
-
-
-    companion object {
-        fun build(
-            engineLogicRepository: EngineLogicRepository,
-        ): QuestionLogic {
-            return QuestionLogic(engineLogicRepository)
-        }
     }
 }

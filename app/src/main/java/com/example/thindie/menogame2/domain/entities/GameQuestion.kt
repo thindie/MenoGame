@@ -4,4 +4,5 @@ data class GameQuestion<T>(
     val fields: MutableList<T>,
     val rightAnswers : T,
     val roundTime: T,
+    val answerTime: T
 ) : SendAble
