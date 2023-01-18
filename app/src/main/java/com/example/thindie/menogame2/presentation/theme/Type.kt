@@ -2,33 +2,86 @@ package com.example.thindie.menogame2.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.thindie.menogame2.R
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
+
+private val light = Font(R.font.dsm, FontWeight.W300)
+private val regular = Font(R.font.dsm, FontWeight.W400)
+private val medium = Font(R.font.dsm, FontWeight.W500)
+private val semibold = Font(R.font.dsm, FontWeight.W600)
+
+private val TheMathGame = FontFamily(fonts = listOf(light, regular, medium, semibold))
+
+
+
+val TheMathGameTypo = Typography(
+    displayLarge = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W300,
+        fontSize = 96.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W400,
+        fontSize = 60.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W600,
+        fontSize = 48.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W600,
+        fontSize = 34.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W600,
+        fontSize = 24.sp
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W400,
+        fontSize = 20.sp
+    ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W500,
+        fontSize = 16.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W600,
+        fontSize = 14.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W600,
+        fontSize = 16.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W400,
+        fontSize = 14.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W600,
+        fontSize = 14.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W500,
+        fontSize = 12.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontFamily = TheMathGame,
+        fontWeight = FontWeight.W400,
+        fontSize = 12.sp
     )
-    */
 )
