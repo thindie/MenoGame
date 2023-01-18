@@ -11,4 +11,20 @@ class MainViewModel @Inject constructor(
     sendUserData: UserSendDataUseCase,
     recieveUserData: UserRecieveDataUseCase
 ) : ViewModel() {
+
+    fun onStartGame() {
+
+    }
+
+    fun onUserActInGame() {
+
+    }
+
+    fun onDataWork() {
+
+    }
+
+    fun onEndGame() {
+
+    }
 }
