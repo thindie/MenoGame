@@ -16,6 +16,6 @@ class MenoGameDomainRepoImpl @Inject constructor(
     }
 
     override suspend fun sendData(): Flow<SendAble> {
-       return engineLogicRepository.sendGameData()
+        return engineLogicRepository.sendGameData()
     }
 }

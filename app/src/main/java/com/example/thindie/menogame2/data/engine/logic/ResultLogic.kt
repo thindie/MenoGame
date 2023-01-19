@@ -12,14 +12,14 @@ class ResultLogic constructor(
         get() = _list
 
 
-      fun setAndCalculate(result: GameResult<Long>) {
+    fun setAndCalculate(result: GameResult<Long>) {
         _list.add(result)
     }
 
 
     companion object {
         fun build(
-            engineLogicRepository: EngineLogicRepository,
+            engineLogicRepository: EngineLogicRepository
         ): ResultLogic {
             return ResultLogic(engineLogicRepository, System.currentTimeMillis())
         }
