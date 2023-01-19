@@ -8,15 +8,14 @@ import javax.inject.Inject
 
 class MenoGameDomainRepoImpl @Inject constructor(
     private val engineLogicRepository: EngineLogicRepository,
-
 ) : DomainRepository {
 
 
     override suspend fun recieveData(sendAble: Flow<SendAble>) {
-        TODO("Not yet implemented")
+        engineLogicRepository.recieveGameData(sendAble)
     }
 
     override suspend fun sendData(): Flow<SendAble> {
-        TODO("Not yet implemented")
+        return engineLogicRepository.sendGameData()
     }
 }

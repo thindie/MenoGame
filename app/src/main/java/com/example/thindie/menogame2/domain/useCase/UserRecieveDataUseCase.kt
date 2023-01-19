@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 class UserRecieveDataUseCase @Inject constructor(private val repository: DomainRepository) {
     suspend operator fun invoke(): Flow<SendAble> {
-        return repository.sendData().flowOn(Dispatchers.IO
+        return repository.sendData().flowOn(
+            Dispatchers.IO
         )
     }
 }

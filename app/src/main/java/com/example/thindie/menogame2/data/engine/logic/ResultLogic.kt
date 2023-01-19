@@ -7,18 +7,23 @@ class ResultLogic constructor(
     private val engineLogicRepository: EngineLogicRepository,
     private val startTime: Long
 ) {
+    private val _list: MutableList<GameResult<Long>> = mutableListOf()
+    val resultList: List<GameResult<Long>>
+        get() = _list
 
-    fun calculateAndGet(currentTime: Long, result: GameResult<Long>) {
 
+    fun setAndCalculate(result: GameResult<Long>) {
+        _list.add(result)
     }
+
 
     companion object {
         fun build(
-            engineLogicRepository: EngineLogicRepository,
+            engineLogicRepository: EngineLogicRepository
         ): ResultLogic {
             return ResultLogic(engineLogicRepository, System.currentTimeMillis())
         }
     }
 
-    private fun calculateOnTime() {}
+
 }

@@ -10,5 +10,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DomainModule {
-    @Binds abstract  fun  bindDomainRepository(impl: MenoGameDomainRepoImpl) : DomainRepository
+    @Binds
+    abstract fun bindDomainRepository(impl: MenoGameDomainRepoImpl): DomainRepository
 }
