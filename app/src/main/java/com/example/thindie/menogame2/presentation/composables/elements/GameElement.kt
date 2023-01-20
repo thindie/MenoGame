@@ -15,8 +15,9 @@ import com.example.thindie.menogame2.presentation.theme.MenoGame2Theme
 fun GameElement(color: Color) {
     Surface(
         shape = CircleShape,
-        modifier = Modifier.size(72.dp),
-        color = color
+        modifier = Modifier.size(102.dp),
+        color = color,
+        tonalElevation = 80.dp
     ) {
 
     }

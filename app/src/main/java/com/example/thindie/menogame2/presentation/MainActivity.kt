@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
                     setContent {
                         MenoGame2Theme {
+
                             when (it) {
                                 is MainViewModel.ViewState.StartScreen -> {
                                     Surface {
