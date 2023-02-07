@@ -8,7 +8,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-private fun mathGameColors(boolean: Boolean): ColorScheme {
+private fun MenoGameColors(boolean: Boolean): ColorScheme {
     return if (!boolean) LightColors else DarkColors
 
 }
@@ -85,12 +85,12 @@ fun MenoGame2Theme(
 ) {
 
     val systemUIController = rememberSystemUiController()
-    systemUIController.setSystemBarsColor(mathGameColors(useDarkTheme).surface)
+    systemUIController.setSystemBarsColor(MenoGameColors(useDarkTheme).surface)
 
     MaterialTheme(
-        colorScheme = mathGameColors(useDarkTheme),
+        colorScheme = MenoGameColors(useDarkTheme),
         content = content,
-        typography = TheMathGameTypo,
+        typography = MenoGameTypo,
         shapes = Shapes
     )
 }

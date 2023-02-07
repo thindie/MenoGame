@@ -17,7 +17,7 @@ private val semibold = Font(R.font.dsm, FontWeight.W600)
 private val MenoGame2Theme = FontFamily(fonts = listOf(light, regular, medium, semibold))
 
 
-val TheMathGameTypo = Typography(
+val MenoGameTypo = Typography(
     displayLarge = TextStyle(
         fontFamily = MenoGame2Theme,
         fontWeight = FontWeight.W300,
