@@ -20,6 +20,9 @@ private const val FIELD_ON_DIVIDER_SETTER = 8
 private const val WRONG = 0
 private const val RIGHT = 1
 
+private const val TIME_DIVIDER = 3
+private const val TIME_PARAM = 5
+
 
 @Singleton
 class GameRoundBuilder @Inject constructor(@DispatchersModule.IODispatcher val io: CoroutineDispatcher) {
@@ -31,31 +34,25 @@ class GameRoundBuilder @Inject constructor(@DispatchersModule.IODispatcher val i
         get() = _questions.toList()
 
 
-    private fun generateQuestion() {
+    fun generateQuestion() : GameRoundModel {
+
         val questionPad = levelNow().gameFieldSet().prepareQuestionPad()
+
         _questions.add(
             GameRoundModel(
-                shownScore = levelNow().times(SCORE_MULTIPLIER),
-                answerTime = 0,
-                showPadTime = 0,
+                shownScore = levelNow().willIterateScore(SCORE_MULTIPLIER),
+                answerTime =  levelNow().setAnswerTime(),
                 questionPad = questionPad,
                 shownPad = questionPad.asShownPad()
             )
         )
+        return questions.last()
     }
 
-    private fun onCancel() {
-
-    }
-
-    private suspend fun onQuestionTriggered() {
-
-    }
+    private fun Int.setAnswerTime() = run { TIME_PARAM.minus(this.div(TIME_DIVIDER)).toLong() }
 
 
-
-    private fun Long.timeFromStart() = System.currentTimeMillis().minus(this).div(IN_MILLIS)
-    private fun Long.isTicked(howLong: Int) = this > howLong
+    private fun levelNow() = run { gameTimes.levelDependOnTime() }
 
     private val List<Int>.levelDependOnTime: () -> Int
         get() = {
@@ -68,8 +65,9 @@ class GameRoundBuilder @Inject constructor(@DispatchersModule.IODispatcher val i
             result
         }
 
-    private fun levelNow() = run { gameTimes.levelDependOnTime() }
+    private fun Long.isTicked(howLong: Int) = this > howLong
 
+    private fun Long.timeFromStart() = System.currentTimeMillis().minus(this).div(IN_MILLIS)
     private fun Int.gameFieldSet(): List<Int> {
         val listSize = this.div(FIELD_ON_TIME_DIVIDER).times(FIELD_ON_DIVIDER_SETTER)
         val gameFieldList = MutableList(listSize) { index ->
@@ -78,13 +76,15 @@ class GameRoundBuilder @Inject constructor(@DispatchersModule.IODispatcher val i
         return gameFieldList.toList()
     }
 
+    private fun Int.willIterateScore(score: Int): Int {
+        return this.times(score)
+    }
 
     private fun List<Int>.asShownPad(): List<Int> {
         val size = this.size
         this.toMutableList().clear()
         return MutableList(size) { WRONG }.toList()
     }
-
 
     private fun List<Int>.prepareQuestionPad(): List<Int> {
         this.toMutableList().shuffle()
