@@ -5,5 +5,5 @@ data class GameRound(
     val answerTime: Long,
     val showPadTime: Long,
     val questionPad: List<Int>,
-    val shownPad: List<Int>
+    val howManyRightAnswers: Int
 )

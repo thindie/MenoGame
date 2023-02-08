@@ -1,11 +1,14 @@
 package com.example.thindie.menogame2.presentation.theme
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private fun MenoGameColors(boolean: Boolean): ColorScheme {
@@ -78,6 +81,7 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenoGame2Theme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -89,8 +93,12 @@ fun MenoGame2Theme(
 
     MaterialTheme(
         colorScheme = MenoGameColors(useDarkTheme),
-        content = content,
         typography = MenoGameTypo,
         shapes = Shapes
-    )
+    ){
+        CompositionLocalProvider(
+            LocalOverscrollConfiguration provides null,
+            content = content
+        )
+    }
 }

@@ -5,11 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
-
-
+import com.example.thindie.menogame2.presentation.composables.elements.State
 import com.example.thindie.menogame2.presentation.theme.MenoGame2Theme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -18,10 +17,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, true)
-
+        viewModel.onStart()
         setContent {
             MenoGame2Theme {
-
+                State()
             }
         }
 

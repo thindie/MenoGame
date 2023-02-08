@@ -7,9 +7,15 @@ data class GameRoundModel(
     val answerTime: Long,
     val showPadTime: Long = answerTime,
     val questionPad: List<Int>,
-    val shownPad: List<Int>
+    val howManyAnswers: Int,
 )
 
-fun GameRoundModel.transform() : GameRound {
-  return   GameRound(this.shownScore.toString(), this.answerTime, this.showPadTime, this.questionPad, this.shownPad)
+fun GameRoundModel.transform(): GameRound {
+    return GameRound(
+        this.shownScore.toString(),
+        this.answerTime,
+        this.showPadTime,
+        this.questionPad,
+        this.howManyAnswers,
+    )
 }
