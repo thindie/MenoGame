@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thindie.menogame2.domain.entities.GameRound
+import com.example.thindie.menogame2.domain.entities.PlayerInit
+import com.example.thindie.menogame2.domain.entities.abstractions.Information
 import com.example.thindie.menogame2.domain.useCase.GetPlayScreenUseCase
 import com.example.thindie.menogame2.domain.useCase.GetUserInformationUseCase
 import com.example.thindie.menogame2.domain.useCase.SendGameInformationUseCase
@@ -12,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,23 +38,32 @@ class MainViewModel @Inject constructor(
 
     fun onStart() {
         viewModelScope.launch {
-           _viewState.value = ViewState.onGame(getPlayScreenUseCase())
+           _viewState.value = ViewState.onStart
         }
     }
 
     fun onSolved(){
-
         viewModelScope.launch {
             _viewState.value = ViewState.onGame(getPlayScreenUseCase())
         }
-
     }
 
 
-    fun onDataWork() {
-
-
+    fun onDataWork(name: String) {
+        viewModelScope.launch {
+            sendUserData(PlayerInit(name))
+        }
     }
+    fun onShowRecord() {
+         viewModelScope.launch {
+              getUserData().collect{
+                  val informationList = mutableListOf<Information>()
+                  informationList.add(it)
+                  _viewState.value = ViewState.onRecord(informationList)
+              }
+         }
+    }
+
 
     fun onEndGame() {
         Log.d("SERVICE_TAG", "GAME OVER")
@@ -60,13 +72,13 @@ class MainViewModel @Inject constructor(
     sealed class ViewState {
         data class onGame(val gameScreen: GameRound) : ViewState()
         data class onLoading(val timing: Long) : ViewState()
-
+        data class onRecord(val information: List<Information>) : ViewState()
+        object onStart : ViewState()
         object onFinish : ViewState()
         object onError : ViewState()
     }
 companion object{
     private const val INITIAL_LOADING = 2000L
-    private const val SOLVED_LOADING = 20L
 }
 
 }
