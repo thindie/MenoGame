@@ -5,21 +5,27 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
-
+private const val TO_WHOLE_TIME = 2
 private const val RIGHT = 0
 private const val COLUMNS_ARE = 4
-private const val MILLIS = 1000
+private const val MILLIS = 1000L
 
 @Composable
 fun GameScreen(
     time: Long,
+    score: String,
     answersNeeded: Int,
     shownList: List<Int>,
     gameOver: () -> Unit,
@@ -43,6 +49,23 @@ fun GameScreen(
 
 
     Column(modifier = modifier.fillMaxSize()) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+            ) {
+                IconButton(onClick = { gameOver() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBackIosNew,
+                        contentDescription = ""
+                    )
+                }
+                Spacer(modifier = modifier.weight(0.7f))
+                Text(
+                    score,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         Spacer(modifier.weight(0.8f))
         LazyVerticalGrid(
             contentPadding = PaddingValues(all = 80.dp),
@@ -63,14 +86,14 @@ fun GameScreen(
     }
 
     LaunchedEffect(solvedRound) {
-        var ticker = time * 2
+        var ticker = time.times(TO_WHOLE_TIME)
         do {
             if (ticker == time) {
                 showQuestion = !showQuestion
             }
-            delay(1000)
+            delay(MILLIS)
             ticker--
-        } while (ticker > 0)
+        } while (ticker > RIGHT)
         gameOver()
     }
 
@@ -104,7 +127,7 @@ fun AskPad(
     var clicked by remember { mutableStateOf(false) }
     val onClick: () -> Unit = {
         if (!clicked) {
-            if (element.instance == 0) iterateClicks() else gameOver()
+            if (element.instance == RIGHT) iterateClicks() else gameOver()
             clicked = true
         }
     }

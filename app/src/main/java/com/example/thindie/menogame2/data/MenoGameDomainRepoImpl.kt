@@ -18,7 +18,7 @@ class MenoGameDomainRepoImpl @Inject constructor(
         gameRoundBuilder.generateQuestion().transform()
 
 
-    override suspend fun getInformationScreen(): Information {
+    override suspend fun getInformationScreen(): Flow<Information> {
         TODO("Not yet implemented")
     }
 

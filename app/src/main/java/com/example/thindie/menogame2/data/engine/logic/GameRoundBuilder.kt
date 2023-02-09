@@ -33,21 +33,30 @@ class GameRoundBuilder @Inject constructor() {
     fun generateQuestion(): GameRoundModel {
 
         val questionPad = levelNow().gameFieldSet().prepareQuestionPad()
-
+        val showScore = levelNow().willIterateScore(SCORE_MULTIPLIER)
         _questions.add(
             GameRoundModel(
-                shownScore = levelNow().willIterateScore(SCORE_MULTIPLIER),
+                shownScore = showScore,
                 answerTime = levelNow().setAnswerTime(),
                 questionPad = questionPad,
                 howManyAnswers = questionPad.howManyAnswers()
             )
         )
         Log.d("SERVICE_TAG",  "GENERATED")
-        return questions.last()
+        return questions.last().copy(shownScore = showScore.collectFromList())
     }
 
     private fun Int.setAnswerTime() = run { TIME_PARAM.minus(this.div(TIME_DIVIDER)).toLong() }
 
+    private fun Int.collectFromList(): Int{
+        return this.plus(_questions.collectScore())
+    }
+
+    private fun List<GameRoundModel>.collectScore(): Int {
+        var scores = 0
+        this.forEach { scores += it.shownScore }
+        return scores
+    }
 
     private fun levelNow() = run { gameTimes.levelDependOnTime() }
 
