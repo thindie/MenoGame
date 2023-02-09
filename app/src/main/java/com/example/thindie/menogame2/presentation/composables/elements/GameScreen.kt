@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.presentation.composables.elements
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -122,13 +123,23 @@ fun RevealPad(
 
 @Composable
 fun AskPad(
-    element: UiGameElement, iterateClicks: () -> Unit, gameOver: () -> Unit
+    element: UiGameElement,
+    iterateClicks: () -> Unit,
+    gameOver: () -> Unit
 ) {
     var clicked by remember { mutableStateOf(false) }
+
     val onClick: () -> Unit = {
         if (!clicked) {
-            if (element.instance == RIGHT) iterateClicks() else gameOver()
-            clicked = true
+            if (element.instance == RIGHT) {
+                iterateClicks(); clicked = true
+            } else {
+                gameOver()
+                Log.d("SERVICE_TAG", "MISSCLICK")
+            }
+        }
+        else{
+            gameOver()
         }
     }
     FloatingActionButton(
