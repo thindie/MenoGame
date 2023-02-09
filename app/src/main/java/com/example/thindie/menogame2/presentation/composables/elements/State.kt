@@ -39,7 +39,9 @@ fun State() {
         }
         onStart -> {
             StartScreen(onNewGame = { viewModel.onSolved() },
-                onRecord = {viewModel.onEndGame()}) {}
+                        onRecord = { viewModel.onEndGame() },
+                        onSavePlayer = {viewModel.onDataWork(it)}
+            ) {}
         }
     }
 }

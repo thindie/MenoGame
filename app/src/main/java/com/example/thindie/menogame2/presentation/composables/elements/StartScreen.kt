@@ -26,6 +26,7 @@ import com.example.thindie.menogame2.presentation.theme.Shapes
 fun StartScreen(
     modifier: Modifier = Modifier,
     onNewGame: () -> Unit,
+    onSavePlayer: (String) -> Unit,
     onRecord: () -> Unit,
     onExit: () -> Unit
 ) {
@@ -45,8 +46,10 @@ fun StartScreen(
                 modifier = modifier.padding(top = 40.dp),
                 trailingIcon = {
                     IconButton(onClick = {
-                        labelState = textFieldState; textFieldState =
-                        ""; keyboardController?.hide()
+                        labelState = textFieldState;
+                        textFieldState = "";
+                        keyboardController?.hide()
+                        onSavePlayer(labelState)
                     }) {
                         Icon(imageVector = Icons.Default.SaveAlt, contentDescription = "")
                     }
