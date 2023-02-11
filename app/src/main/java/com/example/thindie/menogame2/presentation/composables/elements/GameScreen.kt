@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.presentation.composables.elements
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -9,11 +10,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
@@ -47,39 +48,46 @@ fun GameScreen(
     }
 
 
-
-    Column(modifier = modifier.fillMaxSize()) {
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
+    ) {
+        Column(modifier = modifier.fillMaxSize()) {
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 16.dp)
             ) {
                 IconButton(onClick = { gameOver() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBackIosNew,
-                        contentDescription = ""
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 Spacer(modifier = modifier.weight(0.7f))
                 Text(
                     score,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
-        Spacer(modifier.weight(0.8f))
-        LazyVerticalGrid(
-            contentPadding = PaddingValues(all = 80.dp),
-            modifier = modifier.fillMaxSize(),
-            columns = GridCells.Fixed(COLUMNS_ARE),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            items(shownList) {
-                if (showQuestion)
-                    RevealPad(element = UiGameElement(it, time))
-                else AskPad(element = UiGameElement(it, time),
-                    iterateClicks = { rightClicks++ }) {
-                    gameOver()
+            Divider(modifier.fillMaxWidth(), thickness = Dp.Hairline)
+            Spacer(modifier.weight(0.8f))
+            LazyVerticalGrid(
+                contentPadding = PaddingValues(all = 80.dp),
+                modifier = modifier.fillMaxSize(),
+                columns = GridCells.Fixed(COLUMNS_ARE),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                items(shownList) {
+                    if (showQuestion)
+                        RevealPad(element = UiGameElement(it, time))
+                    else AskPad(element = UiGameElement(it, time),
+                        iterateClicks = { rightClicks++ }) {
+                        gameOver()
+                    }
                 }
             }
         }
@@ -112,8 +120,10 @@ fun RevealPad(
     FloatingActionButton(
         shape = CircleShape,
         onClick = {},
-        containerColor = if (element.instance != RIGHT) MaterialTheme.colorScheme.onPrimaryContainer
-        else MaterialTheme.colorScheme.errorContainer
+        containerColor = if (element.instance != RIGHT) MaterialTheme.colorScheme.onPrimaryContainer.copy(
+            alpha = 0.9f
+        )
+        else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f)
     ) {
 
     }
@@ -122,13 +132,22 @@ fun RevealPad(
 
 @Composable
 fun AskPad(
-    element: UiGameElement, iterateClicks: () -> Unit, gameOver: () -> Unit
+    element: UiGameElement,
+    iterateClicks: () -> Unit,
+    gameOver: () -> Unit
 ) {
     var clicked by remember { mutableStateOf(false) }
+
     val onClick: () -> Unit = {
         if (!clicked) {
-            if (element.instance == RIGHT) iterateClicks() else gameOver()
-            clicked = true
+            if (element.instance == RIGHT) {
+                iterateClicks(); clicked = true
+            } else {
+                gameOver()
+                Log.d("SERVICE_TAG", "MISSCLICK")
+            }
+        } else {
+            gameOver()
         }
     }
     FloatingActionButton(
@@ -137,7 +156,11 @@ fun AskPad(
         containerColor = MaterialTheme.colorScheme.onPrimaryContainer
 
     ) {
-
+        Icon(
+            imageVector = Icons.Default.Quiz,
+            contentDescription = "",
+            tint = MaterialTheme.colorScheme.surface.copy(0.5f)
+        )
     }
 }
 

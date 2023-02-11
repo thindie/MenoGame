@@ -1,6 +1,7 @@
 package com.example.thindie.menogame2.data.engine.logic
 
-import android.util.Log
+import com.example.thindie.menogame2.domain.entities.PlayerInit
+import com.example.thindie.menogame2.domain.entities.PlayerRecord
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +19,7 @@ private const val RIGHT = 1
 
 private const val TIME_DIVIDER = 15
 private const val TIME_PARAM = 5
+private const val INITIAL = 1
 
 
 @Singleton
@@ -28,28 +30,66 @@ class GameRoundBuilder @Inject constructor() {
     private val _questions = mutableListOf<GameRoundModel>()
     val questions: List<GameRoundModel>
         get() = _questions.toList()
+    private var addition = INITIAL
 
+
+    fun buildResult(playerInit: PlayerInit): PlayerRecord {
+        return playerInit.onEndGame()
+    }
+
+    fun PlayerInit.onEndGame(): PlayerRecord {
+        val timePlayed = howLong.timeFromStart().toString()
+        val questionSolved = _questions.size.toString()
+        val score = WRONG.withCollectFromList().toString()
+        return PlayerRecord(
+            this.playerName,
+            scoreInformation = score,
+            timeInformation = timePlayed,
+            questionsQuota = questionSolved
+        )
+    }
 
     fun generateQuestion(): GameRoundModel {
 
-        val questionPad = levelNow().gameFieldSet().prepareQuestionPad()
+        val questionPad =
+            levelNow().gameFieldSet().checkAndAddAdditionalDifficulty().prepareQuestionPad()
         val showScore = levelNow().willIterateScore(SCORE_MULTIPLIER)
-        _questions.add(
-            GameRoundModel(
-                shownScore = showScore,
-                answerTime = levelNow().setAnswerTime(),
-                questionPad = questionPad,
-                howManyAnswers = questionPad.howManyAnswers()
+        if (questions.isEmpty()) {
+            _questions.add(
+                GameRoundModel(
+                    shownScore = WRONG,
+                    answerTime = levelNow().setAnswerTime(),
+                    questionPad = questionPad,
+                    howManyAnswers = questionPad.howManyAnswers()
+                )
             )
-        )
-        Log.d("SERVICE_TAG",  "GENERATED")
-        return questions.last().copy(shownScore = showScore.collectFromList())
+        } else {
+            _questions.add(
+                GameRoundModel(
+                    shownScore = showScore,
+                    answerTime = levelNow().setAnswerTime(),
+                    questionPad = questionPad,
+                    howManyAnswers = questionPad.howManyAnswers()
+                )
+            )
+        }
+        return questions.last().copy(shownScore = showScore.withCollectFromList())
     }
 
-    private fun Int.setAnswerTime() = run { TIME_PARAM.minus(this.div(TIME_DIVIDER)).toLong() }
+    private fun Int.setAnswerTime() = run { this.div(TIME_DIVIDER).toLong() }
 
-    private fun Int.collectFromList(): Int{
+    private fun Int.withCollectFromList(): Int {
         return this.plus(_questions.collectScore())
+    }
+
+    private fun List<Int>.checkAndAddAdditionalDifficulty(): List<Int> {
+        if (levelNow() == IS_MASTER) {
+            val gameFieldList = MutableList(this.size) { index ->
+                levelNow().plus(++addition).onDependedWillFill(index)
+            }
+            return gameFieldList.toList()
+        }
+        return this
     }
 
     private fun List<GameRoundModel>.collectScore(): Int {
@@ -103,3 +143,5 @@ class GameRoundBuilder @Inject constructor() {
 
 
 }
+
+

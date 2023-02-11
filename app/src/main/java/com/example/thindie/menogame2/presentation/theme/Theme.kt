@@ -95,7 +95,7 @@ fun MenoGame2Theme(
         colorScheme = MenoGameColors(useDarkTheme),
         typography = MenoGameTypo,
         shapes = Shapes
-    ){
+    ) {
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null,
             content = content

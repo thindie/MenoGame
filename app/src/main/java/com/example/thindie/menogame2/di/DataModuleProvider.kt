@@ -1,7 +1,6 @@
 package com.example.thindie.menogame2.di
 
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 

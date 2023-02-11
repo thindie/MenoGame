@@ -8,6 +8,7 @@ import com.example.thindie.menogame2.domain.entities.abstractions.Information
 fun RecordScreen(list: List<Information>) {
 
 }
+
 @Composable
 fun RecordScreenElement(playerName: String?, scoreInformation: String?) {
 
