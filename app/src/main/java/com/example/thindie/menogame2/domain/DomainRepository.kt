@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface DomainRepository {
     suspend fun getPlayScreen(): GameRound
-    suspend fun getInformationScreen() : Flow<Information>
+    suspend fun  getInformationScreen() : Flow<Information>
     suspend fun addInformation(information: Information)
+
+    suspend fun initName(): String?
 }

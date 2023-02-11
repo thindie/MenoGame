@@ -25,16 +25,21 @@ import com.example.thindie.menogame2.presentation.theme.Shapes
 @Composable
 fun StartScreen(
     modifier: Modifier = Modifier,
+    name: String?,
     onNewGame: () -> Unit,
     onSavePlayer: (String) -> Unit,
     onRecord: () -> Unit,
     onExit: () -> Unit
 ) {
     var textFieldState by rememberSaveable { mutableStateOf("") }
-    var labelState by rememberSaveable { mutableStateOf("") }
+    var labelState by rememberSaveable { mutableStateOf(name ?: "") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Surface(modifier = modifier.fillMaxSize()) {
+    Surface(
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.surface,
+        elevation = 150.dp
+    ) {
         Column(
             modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -44,6 +49,20 @@ fun StartScreen(
                 label = { Text("enter name..") },
                 shape = Shapes.extraLarge,
                 modifier = modifier.padding(top = 40.dp),
+
+                  colors = TextFieldDefaults.outlinedTextFieldColors(
+                      focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                      unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                      textColor = MaterialTheme.colorScheme.onSurface,
+                      cursorColor = MaterialTheme.colorScheme.onSurface,
+                      focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                      unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                      disabledLabelColor = MaterialTheme.colorScheme.onSurface,
+                      disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                      disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                      trailingIconColor = MaterialTheme.colorScheme.outline,
+                      backgroundColor = MaterialTheme.colorScheme.surface,
+                  ),
                 trailingIcon = {
                     IconButton(onClick = {
                         labelState = textFieldState;
@@ -65,7 +84,7 @@ fun StartScreen(
                 Spacer(modifier = modifier.weight(0.3f))
                 Animate()
                 Spacer(modifier = modifier.weight(0.3f))
-                ButtonStartScreen({onNewGame()}, "New Game")
+                ButtonStartScreen({ onNewGame() }, "New Game")
                 ButtonStartScreen({}, "Records")
                 ButtonStartScreen({}, "Exit")
             }
@@ -78,12 +97,17 @@ fun StartScreen(
 
 @Composable
 fun ButtonStartScreen(onClick: () -> Unit, description: String) {
-    OutlinedButton(
+    Button(
         onClick = { onClick() },
         shape = Shapes.extraLarge,
         modifier = Modifier
-            .padding(top = 4.dp, bottom = 4.dp)
+            .padding(bottom = 8.dp)
             .width(260.dp)
+            .height(50.dp),
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor =  MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f),
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
 
     ) {
         Text(description, style = MaterialTheme.typography.headlineSmall)

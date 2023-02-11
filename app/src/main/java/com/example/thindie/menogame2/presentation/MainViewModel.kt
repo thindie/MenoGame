@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thindie.menogame2.domain.entities.GameRound
 import com.example.thindie.menogame2.domain.entities.PlayerInit
+import com.example.thindie.menogame2.domain.entities.PlayerRecord
 import com.example.thindie.menogame2.domain.entities.abstractions.Information
 import com.example.thindie.menogame2.domain.useCase.GetPlayScreenUseCase
 import com.example.thindie.menogame2.domain.useCase.GetUserInformationUseCase
+import com.example.thindie.menogame2.domain.useCase.InitNameUseCase
 import com.example.thindie.menogame2.domain.useCase.SendGameInformationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -22,12 +24,14 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val sendUserData: SendGameInformationUseCase,
     private val getUserData: GetUserInformationUseCase,
-    private val getPlayScreenUseCase: GetPlayScreenUseCase
+    private val getPlayScreenUseCase: GetPlayScreenUseCase,
+    private val initNameUseCase: InitNameUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow<ViewState>(ViewState.onLoading(INITIAL_LOADING))
     val viewState: StateFlow<ViewState>
         get() = _viewState.asStateFlow()
+
 
 
       fun onLoadScreen(timing: Long) {
@@ -38,9 +42,11 @@ class MainViewModel @Inject constructor(
 
     fun onStart() {
         viewModelScope.launch {
-           _viewState.value = ViewState.onStart
+                    _viewState.value = ViewState.onStart(initNameUseCase())
+            }
+
         }
-    }
+
 
     fun onSolved(){
         viewModelScope.launch {
@@ -49,7 +55,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun onDataWork(name: String) {
+    fun onSavePlayer(name: String) {
         viewModelScope.launch {
             sendUserData(PlayerInit(name))
         }
@@ -73,7 +79,7 @@ class MainViewModel @Inject constructor(
         data class onGame(val gameScreen: GameRound) : ViewState()
         data class onLoading(val timing: Long) : ViewState()
         data class onRecord(val information: List<Information>) : ViewState()
-        object onStart : ViewState()
+        data class onStart(val playerName: String?) : ViewState()
         object onFinish : ViewState()
         object onError : ViewState()
     }
