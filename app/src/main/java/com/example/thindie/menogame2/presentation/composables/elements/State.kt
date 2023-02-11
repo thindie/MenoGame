@@ -20,7 +20,7 @@ fun State() {
                 time = screen.answerTime,
                 shownList = screen.questionPad,
                 answersNeeded = screen.howManyRightAnswers,
-                gameOver = { viewModel.onEndGame() },
+                gameOver = { viewModel.onStart() },
                 roundSolved = { viewModel.onSolved() },
                 score = screen.shownScore
             )
@@ -32,7 +32,7 @@ fun State() {
         is onError -> {}
         is onRecord -> {
             val information = (viewState as onRecord).information
-            RecordScreen(information)
+            RecordScreen(information){viewModel.onStart()}
         }
         is onFinish -> {
             viewModel.onEndGame()
@@ -41,7 +41,7 @@ fun State() {
             StartScreen(
                 name = (viewState as onStart).playerName,
                 onNewGame = { viewModel.onSolved() },
-                onRecord = { viewModel.onEndGame() },
+                onRecord = { viewModel.onShowRecord() },
                 onSavePlayer = { viewModel.onSavePlayer(it) }
             ) {}
         }

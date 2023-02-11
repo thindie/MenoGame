@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.data
 
+import android.annotation.SuppressLint
 import com.example.thindie.menogame2.data.engine.dataBase.MenoRecordsDao
 import com.example.thindie.menogame2.data.engine.dataBase.map
 import com.example.thindie.menogame2.data.engine.logic.GameRoundBuilder
@@ -14,10 +15,12 @@ import com.example.thindie.menogame2.domain.entities.abstractions.Information
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val UNNAMED = "unnamed"
-private const val SCORE = 800
+private const val SCORE = 2000
 
+@Singleton
 class MenoGameDomainRepoImpl @Inject constructor(
     private val gameRoundBuilder: GameRoundBuilder,
     private val menoRecordsDao: MenoRecordsDao,
@@ -31,6 +34,7 @@ class MenoGameDomainRepoImpl @Inject constructor(
         gameRoundBuilder.generateQuestion().transform()
 
 
+    @SuppressLint("SuspiciousIndentation")
     override suspend fun getInformationScreen(): Flow<Information> {
         playerRecord = gameRoundBuilder.buildResult(playerInit)
             if (playerRecord.scoreInformation.toInt() > SCORE) {

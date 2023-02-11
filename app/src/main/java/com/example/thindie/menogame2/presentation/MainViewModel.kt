@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.presentation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -51,9 +52,11 @@ class MainViewModel @Inject constructor(
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun onSavePlayer(name: String) {
         viewModelScope.launch {
-            sendUserData(PlayerInit(name))
+         val player =   PlayerInit(name)
+            sendUserData(player)
         }
     }
 

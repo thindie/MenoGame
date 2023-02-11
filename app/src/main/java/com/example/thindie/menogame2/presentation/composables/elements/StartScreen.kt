@@ -75,6 +75,7 @@ fun StartScreen(
                 })
             if (textFieldState != "" || labelState != "") {
                 if (labelState != "") {
+                    onSavePlayer(labelState)
                     Text(
                         text = labelState,
                         style = MaterialTheme.typography.displaySmall,
@@ -85,7 +86,7 @@ fun StartScreen(
                 Animate()
                 Spacer(modifier = modifier.weight(0.3f))
                 ButtonStartScreen({ onNewGame() }, "New Game")
-                ButtonStartScreen({}, "Records")
+                ButtonStartScreen({ onRecord()}, "Records")
                 ButtonStartScreen({}, "Exit")
             }
 

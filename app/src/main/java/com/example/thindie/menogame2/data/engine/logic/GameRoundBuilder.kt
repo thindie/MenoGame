@@ -22,8 +22,7 @@ private const val TIME_PARAM = 5
 private const val INITIAL = 1
 
 
-@Singleton
-class GameRoundBuilder @Inject constructor() {
+ class GameRoundBuilder @Inject constructor() {
 
     private val howLong = System.currentTimeMillis()
     private val gameTimes = listOf(IS_FRESH, IS_START, IS_SIGNIFICANT, IS_MASTER)
