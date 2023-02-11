@@ -9,8 +9,8 @@ import androidx.room.Query
 interface NameDao {
 
     @Query("SELECT * FROM nameBuffer ORDER by name DESC")
-   suspend fun getName() :  NameSaveDbModel
+    suspend fun getName(): NameSaveDbModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun saveName(name: NameSaveDbModel)
+    suspend fun saveName(name: NameSaveDbModel)
 }

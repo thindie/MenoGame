@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [MenoRecordDbModel::class], version = 1, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun menoDao() : MenoRecordsDao
+    abstract fun menoDao(): MenoRecordsDao
 
     companion object {
         private var INSTANCE: AppDataBase? = null

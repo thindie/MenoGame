@@ -5,18 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thindie.menogame2.domain.entities.GameRound
 import com.example.thindie.menogame2.domain.entities.PlayerInit
-import com.example.thindie.menogame2.domain.entities.PlayerRecord
 import com.example.thindie.menogame2.domain.entities.abstractions.Information
 import com.example.thindie.menogame2.domain.useCase.GetPlayScreenUseCase
 import com.example.thindie.menogame2.domain.useCase.GetUserInformationUseCase
 import com.example.thindie.menogame2.domain.useCase.InitNameUseCase
 import com.example.thindie.menogame2.domain.useCase.SendGameInformationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +30,7 @@ class MainViewModel @Inject constructor(
         get() = _viewState.asStateFlow()
 
 
-
-      fun onLoadScreen(timing: Long) {
+    fun onLoadScreen(timing: Long) {
         viewModelScope.launch {
             _viewState.value = ViewState.onLoading(timing)
         }
@@ -42,13 +38,13 @@ class MainViewModel @Inject constructor(
 
     fun onStart() {
         viewModelScope.launch {
-                    _viewState.value = ViewState.onStart(initNameUseCase())
-            }
-
+            _viewState.value = ViewState.onStart(initNameUseCase())
         }
 
+    }
 
-    fun onSolved(){
+
+    fun onSolved() {
         viewModelScope.launch {
             _viewState.value = ViewState.onGame(getPlayScreenUseCase())
         }
@@ -60,14 +56,15 @@ class MainViewModel @Inject constructor(
             sendUserData(PlayerInit(name))
         }
     }
+
     fun onShowRecord() {
-         viewModelScope.launch {
-              getUserData().collect{
-                  val informationList = mutableListOf<Information>()
-                  informationList.add(it)
-                  _viewState.value = ViewState.onRecord(informationList)
-              }
-         }
+        viewModelScope.launch {
+            getUserData().collect {
+                val informationList = mutableListOf<Information>()
+                informationList.add(it)
+                _viewState.value = ViewState.onRecord(informationList)
+            }
+        }
     }
 
 
@@ -83,8 +80,9 @@ class MainViewModel @Inject constructor(
         object onFinish : ViewState()
         object onError : ViewState()
     }
-companion object{
-    private const val INITIAL_LOADING = 2000L
-}
+
+    companion object {
+        private const val INITIAL_LOADING = 2000L
+    }
 
 }

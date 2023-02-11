@@ -19,3 +19,4 @@ fun GameRoundModel.transform(): GameRound {
         this.howManyAnswers,
     )
 }
+

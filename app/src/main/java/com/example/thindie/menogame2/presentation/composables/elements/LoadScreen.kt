@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier, timing: Long,  launched:() -> Unit) {
+fun LoadingScreen(modifier: Modifier = Modifier, timing: Long, launched: () -> Unit) {
 
     val currentTimeOut by rememberUpdatedState(newValue = launched)
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         delay(timing)
-       currentTimeOut()
+        currentTimeOut()
     }
     Surface(color = MaterialTheme.colorScheme.surface) {
         Column(

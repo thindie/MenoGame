@@ -15,12 +15,12 @@ class DispatchersModule {
 
     @IODispatcher
     @Provides
-    fun provideDispatchersIO() : CoroutineDispatcher{
+    fun provideDispatchersIO(): CoroutineDispatcher {
         return Dispatchers.IO
     }
 
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class IODispatcher
+    @Retention(AnnotationRetention.BINARY)
+    @Qualifier
+    annotation class IODispatcher
 
 }

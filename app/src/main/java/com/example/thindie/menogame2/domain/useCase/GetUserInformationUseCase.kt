@@ -10,8 +10,9 @@ import javax.inject.Inject
 
 class GetUserInformationUseCase @Inject constructor(
     private val repository: DomainRepository,
-    @DispatchersModule.IODispatcher  private val ioDispatcher: CoroutineDispatcher) {
-    suspend operator fun  invoke(): Flow<Information> {
+    @DispatchersModule.IODispatcher private val ioDispatcher: CoroutineDispatcher
+) {
+    suspend operator fun invoke(): Flow<Information> {
         return repository.getInformationScreen().flowOn(ioDispatcher)
     }
 }

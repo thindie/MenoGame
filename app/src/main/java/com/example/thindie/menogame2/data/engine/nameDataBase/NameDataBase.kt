@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [NameSaveDbModel::class], version = 1, exportSchema = false)
 abstract class NameDataBase : RoomDatabase() {
 
-    abstract fun nameDao() : NameDao
+    abstract fun nameDao(): NameDao
 
     companion object {
         private var INSTANCE: NameDataBase? = null

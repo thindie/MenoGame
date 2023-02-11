@@ -9,8 +9,8 @@ import androidx.room.Query
 interface MenoRecordsDao {
 
     @Query("SELECT * FROM menoRecords ORDER by score DESC")
-   suspend fun getRecords() : List<MenoRecordDbModel>
+    suspend fun getRecords(): List<MenoRecordDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun saveRecord(recordDbModel: MenoRecordDbModel)
+    suspend fun saveRecord(recordDbModel: MenoRecordDbModel)
 }

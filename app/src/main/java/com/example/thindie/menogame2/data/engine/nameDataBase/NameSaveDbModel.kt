@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "nameBuffer")
 data class NameSaveDbModel(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: Int = 1,
     val name: String,
 
-)
+    )

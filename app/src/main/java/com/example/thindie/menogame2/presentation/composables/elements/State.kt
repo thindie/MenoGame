@@ -39,10 +39,10 @@ fun State() {
         }
         is onStart -> {
             StartScreen(
-                        name = (viewState as onStart).playerName,
-                        onNewGame = { viewModel.onSolved() },
-                        onRecord = { viewModel.onEndGame() },
-                        onSavePlayer = {viewModel.onSavePlayer(it)}
+                name = (viewState as onStart).playerName,
+                onNewGame = { viewModel.onSolved() },
+                onRecord = { viewModel.onEndGame() },
+                onSavePlayer = { viewModel.onSavePlayer(it) }
             ) {}
         }
     }

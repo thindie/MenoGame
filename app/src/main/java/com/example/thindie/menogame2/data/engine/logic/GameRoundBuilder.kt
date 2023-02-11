@@ -1,6 +1,7 @@
 package com.example.thindie.menogame2.data.engine.logic
 
-import java.io.FileReader
+import com.example.thindie.menogame2.domain.entities.PlayerInit
+import com.example.thindie.menogame2.domain.entities.PlayerRecord
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,11 +32,29 @@ class GameRoundBuilder @Inject constructor() {
         get() = _questions.toList()
     private var addition = INITIAL
 
+
+    fun buildResult(playerInit: PlayerInit): PlayerRecord {
+        return playerInit.onEndGame()
+    }
+
+    fun PlayerInit.onEndGame(): PlayerRecord {
+        val timePlayed = howLong.timeFromStart().toString()
+        val questionSolved = _questions.size.toString()
+        val score = WRONG.withCollectFromList().toString()
+        return PlayerRecord(
+            this.playerName,
+            scoreInformation = score,
+            timeInformation = timePlayed,
+            questionsQuota = questionSolved
+        )
+    }
+
     fun generateQuestion(): GameRoundModel {
 
-        val questionPad = levelNow().gameFieldSet().checkAndAddAdditionalDifficulty().prepareQuestionPad()
+        val questionPad =
+            levelNow().gameFieldSet().checkAndAddAdditionalDifficulty().prepareQuestionPad()
         val showScore = levelNow().willIterateScore(SCORE_MULTIPLIER)
-        if(questions.isEmpty()){
+        if (questions.isEmpty()) {
             _questions.add(
                 GameRoundModel(
                     shownScore = WRONG,
@@ -44,8 +63,7 @@ class GameRoundBuilder @Inject constructor() {
                     howManyAnswers = questionPad.howManyAnswers()
                 )
             )
-        }
-        else{
+        } else {
             _questions.add(
                 GameRoundModel(
                     shownScore = showScore,
@@ -58,13 +76,13 @@ class GameRoundBuilder @Inject constructor() {
         return questions.last().copy(shownScore = showScore.withCollectFromList())
     }
 
-    private fun Int.setAnswerTime() = run {  this.div(TIME_DIVIDER).toLong() }
+    private fun Int.setAnswerTime() = run { this.div(TIME_DIVIDER).toLong() }
 
-    private fun Int.withCollectFromList(): Int{
+    private fun Int.withCollectFromList(): Int {
         return this.plus(_questions.collectScore())
     }
 
-    private fun List<Int>.checkAndAddAdditionalDifficulty() : List<Int>{
+    private fun List<Int>.checkAndAddAdditionalDifficulty(): List<Int> {
         if (levelNow() == IS_MASTER) {
             val gameFieldList = MutableList(this.size) { index ->
                 levelNow().plus(++addition).onDependedWillFill(index)
@@ -73,6 +91,7 @@ class GameRoundBuilder @Inject constructor() {
         }
         return this
     }
+
     private fun List<GameRoundModel>.collectScore(): Int {
         var scores = 0
         this.forEach { scores += it.shownScore }

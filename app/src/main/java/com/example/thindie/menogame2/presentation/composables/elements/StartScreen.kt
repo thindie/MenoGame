@@ -50,19 +50,19 @@ fun StartScreen(
                 shape = Shapes.extraLarge,
                 modifier = modifier.padding(top = 40.dp),
 
-                  colors = TextFieldDefaults.outlinedTextFieldColors(
-                      focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                      unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                      textColor = MaterialTheme.colorScheme.onSurface,
-                      cursorColor = MaterialTheme.colorScheme.onSurface,
-                      focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                      unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                      disabledLabelColor = MaterialTheme.colorScheme.onSurface,
-                      disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                      disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-                      trailingIconColor = MaterialTheme.colorScheme.outline,
-                      backgroundColor = MaterialTheme.colorScheme.surface,
-                  ),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.onSurface,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurface,
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    trailingIconColor = MaterialTheme.colorScheme.outline,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
+                ),
                 trailingIcon = {
                     IconButton(onClick = {
                         labelState = textFieldState;
@@ -105,7 +105,7 @@ fun ButtonStartScreen(onClick: () -> Unit, description: String) {
             .width(260.dp)
             .height(50.dp),
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor =  MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f),
+            backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f),
             contentColor = MaterialTheme.colorScheme.onSurface
         )
 
