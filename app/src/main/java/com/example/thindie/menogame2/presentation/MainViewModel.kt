@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onStart() {
+    fun onStartScreen() {
         viewModelScope.launch {
             _viewState.value = ViewState.onStart(initNameUseCase())
         }
@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(
 
     fun onSolved() {
         viewModelScope.launch {
-            _viewState.value = ViewState.onGame(getPlayScreenUseCase())
+            _viewState.value = ViewState.onGame(getPlayScreenUseCase(false))
         }
     }
 
@@ -60,9 +60,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onStartGame(){
+        viewModelScope.launch {
+            _viewState.value = ViewState.onGame(getPlayScreenUseCase(true))
+        }
+    }
+
     fun onShowRecord() {
         viewModelScope.launch {
-            getUserData().collect {
+            getUserData(true).collect {
                 val informationList = mutableListOf<Information>()
                 informationList.add(it)
                 _viewState.value = ViewState.onRecord(informationList)
@@ -72,7 +78,14 @@ class MainViewModel @Inject constructor(
 
 
     fun onEndGame() {
-        Log.d("SERVICE_TAG", "GAME OVER")
+        viewModelScope.launch {
+            getUserData(false).collect {
+                val informationList = mutableListOf<Information>()
+                informationList.add(it)
+                _viewState.value = ViewState.onFinish(informationList)
+            }
+        }
+
     }
 
     sealed class ViewState {
@@ -80,7 +93,7 @@ class MainViewModel @Inject constructor(
         data class onLoading(val timing: Long) : ViewState()
         data class onRecord(val information: List<Information>) : ViewState()
         data class onStart(val playerName: String?) : ViewState()
-        object onFinish : ViewState()
+        data class onFinish(val information: List<Information>) : ViewState()
         object onError : ViewState()
     }
 

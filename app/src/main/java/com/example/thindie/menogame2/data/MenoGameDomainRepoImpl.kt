@@ -22,33 +22,48 @@ private const val SCORE = 2000
 
 @Singleton
 class MenoGameDomainRepoImpl @Inject constructor(
-    private val gameRoundBuilder: GameRoundBuilder,
-    private val menoRecordsDao: MenoRecordsDao,
-    private val nameDao: NameDao
+    private val menoRecordsDao: MenoRecordsDao, private val nameDao: NameDao
 ) : DomainRepository {
 
+    override lateinit var gameRoundBuilder: GameRoundBuilder
     private lateinit var playerInit: PlayerInit
     private lateinit var playerRecord: PlayerRecord
 
-    override suspend fun getPlayScreen(): GameRound =
-        gameRoundBuilder.generateQuestion().transform()
+    init {
+        GameRoundBuilder.build(this)
+    }
+
+    override suspend fun getPlayScreen(isNewGame: Boolean): GameRound {
+        if (isNewGame) {
+             GameRoundBuilder.build(this)
+        }
+        return gameRoundBuilder.generateQuestion().transform()
+    }
 
 
     @SuppressLint("SuspiciousIndentation")
-    override suspend fun getInformationScreen(): Flow<Information> {
+    override suspend fun getInformationScreen(isShowRecords : Boolean): Flow<Information> {
+
         playerRecord = gameRoundBuilder.buildResult(playerInit)
             if (playerRecord.scoreInformation.toInt() > SCORE) {
-                val record: PlayerRecord = try {
-                    menoRecordsDao.getRecords().last().map()
-                } catch (e: NullPointerException) {
-                    playerRecord
-                }
-
-                if (record.scoreInformation.toInt() <= playerRecord.scoreInformation.toInt()) {
+                try {
+                     val record: PlayerRecord = menoRecordsDao.getRecords().last().map()
+                        if (record.scoreInformation.toInt() <= playerRecord.scoreInformation.toInt()) {
+                            menoRecordsDao.saveRecord(playerRecord.map())
+                        }
+                } catch (e: Exception) {
                     menoRecordsDao.saveRecord(playerRecord.map())
                 }
             }
-         return flow {
+        if(isShowRecords){
+            return flow{
+                menoRecordsDao.getRecords().map {
+                    emit(it.map())
+                }
+            }
+        }
+
+        return flow {
             emit(playerRecord)
         }
     }

@@ -1,9 +1,9 @@
 package com.example.thindie.menogame2.data.engine.logic
 
+import com.example.thindie.menogame2.domain.DomainRepository
 import com.example.thindie.menogame2.domain.entities.PlayerInit
 import com.example.thindie.menogame2.domain.entities.PlayerRecord
-import javax.inject.Inject
-import javax.inject.Singleton
+
 
 
 private const val IN_MILLIS = 1000L
@@ -18,11 +18,10 @@ private const val WRONG = 0
 private const val RIGHT = 1
 
 private const val TIME_DIVIDER = 15
-private const val TIME_PARAM = 5
 private const val INITIAL = 1
 
 
- class GameRoundBuilder @Inject constructor() {
+class GameRoundBuilder(private val domainRepository: DomainRepository) {
 
     private val howLong = System.currentTimeMillis()
     private val gameTimes = listOf(IS_FRESH, IS_START, IS_SIGNIFICANT, IS_MASTER)
@@ -137,9 +136,14 @@ private const val INITIAL = 1
     }
 
     private fun List<Int>.howManyAnswers(): Int {
-        return this.filter { it == 0 }.size.plus(RIGHT)
+        return this.filter { it == 0 }.size
     }
 
+    companion object {
+        fun build(domainRepository: DomainRepository) {
+            domainRepository.gameRoundBuilder = GameRoundBuilder(domainRepository)
+        }
+    }
 
 }
 
