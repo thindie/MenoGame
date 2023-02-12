@@ -15,5 +15,5 @@ interface MenoRecordsDao {
     suspend fun saveRecord(recordDbModel: MenoRecordDbModel)
 
     @Query("DELETE FROM menoRecords WHERE id=:recordId")
-   suspend fun deleteRecord(recordId : Int)
+    suspend fun deleteRecord(recordId: Int)
 }

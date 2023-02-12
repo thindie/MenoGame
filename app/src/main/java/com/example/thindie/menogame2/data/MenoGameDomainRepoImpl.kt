@@ -80,15 +80,14 @@ class MenoGameDomainRepoImpl @Inject constructor(
             val list = menoRecordsDao.getRecords()
             if (list.isNotEmpty()) {
                 list.forEach {
-                    if (it.name == playerRecord.playerName){
-                        if(playerRecord.scoreInformation.toInt() > it.score.toInt()){
+                    if (it.name == playerRecord.playerName) {
+                        if (playerRecord.scoreInformation.toInt() > it.score.toInt()) {
                             menoRecordsDao.deleteRecord(it.id)
-                        }
-                        else return
+                        } else return
                     }
                 }
             }
-             menoRecordsDao.saveRecord(playerRecord.map())
+            menoRecordsDao.saveRecord(playerRecord.map())
         }
     }
 }

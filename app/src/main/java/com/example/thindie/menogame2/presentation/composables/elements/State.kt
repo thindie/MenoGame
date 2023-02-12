@@ -46,11 +46,12 @@ fun State(onExit: () -> Unit) {
                 onNewGame = { viewModel.onStartGame(false) },
                 onRecord = { viewModel.onShowRecord() },
                 onSavePlayer = { viewModel.onSavePlayer(it) },
-                onMaster = {viewModel.onStartGame(true)},
+                onMaster = { viewModel.onStartGame(true) },
                 onExit = { Log.d("SERVICE_TAG", "ONEXIT"); onExit() }
             )
         }
     }
 }
+
 private const val RECORDS = "  Players with awesome scores "
 private const val RESULT = "Your result is:  "

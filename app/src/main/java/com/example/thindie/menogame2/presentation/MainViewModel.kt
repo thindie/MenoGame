@@ -1,7 +1,6 @@
 package com.example.thindie.menogame2.presentation
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thindie.menogame2.domain.entities.GameRound
@@ -55,12 +54,12 @@ class MainViewModel @Inject constructor(
     @SuppressLint("SuspiciousIndentation")
     fun onSavePlayer(name: String) {
         viewModelScope.launch {
-         val player =   PlayerInit(name)
+            val player = PlayerInit(name)
             sendUserData(player)
         }
     }
 
-    fun onStartGame(isMaster: Boolean){
+    fun onStartGame(isMaster: Boolean) {
         viewModelScope.launch {
             _viewState.value = ViewState.onGame(getPlayScreenUseCase(true, isMaster))
         }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DomainRepository {
     var gameRoundBuilder: GameRoundBuilder
-    suspend fun getPlayScreen(isNewGame: Boolean, isMaster : Boolean): GameRound
+    suspend fun getPlayScreen(isNewGame: Boolean, isMaster: Boolean): GameRound
     suspend fun getInformationScreen(isShowRecords: Boolean): Flow<List<Information>>
     suspend fun addInformation(information: Information)
     suspend fun initName(): String?

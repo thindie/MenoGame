@@ -15,7 +15,7 @@ private const val INITIAL_LOADING = 1000L
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
-        val onStop: () -> Unit = {onBackPressedDispatcher.onBackPressed()}
+        val onStop: () -> Unit = { onBackPressedDispatcher.onBackPressed() }
         super.onCreate(savedInstanceState)
         viewModel.onLoadScreen(INITIAL_LOADING)
         WindowCompat.setDecorFitsSystemWindows(window, true)
@@ -27,4 +27,4 @@ class MainActivity : ComponentActivity() {
 
 
     }
- }
+}

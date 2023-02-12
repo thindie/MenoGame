@@ -88,19 +88,21 @@ fun GameScreen(
                     if (showQuestion)
                         RevealPad(element = UiGameElement(it, time))
                     else AskPad(element = UiGameElement(it, time),
-                        iterateClicks = { rightClicks++ }, gameOver = {gameOver()})
+                        iterateClicks = { rightClicks++ }, gameOver = { gameOver() })
                 }
             }
         }
     }
 
     LaunchedEffect(solvedRound) {
-         val delayed = time.times(MILLIS);
-            delay(delayed)
+        val delayed = time.times(MILLIS);
+        delay(delayed)
         showQuestion = !showQuestion
-             delay(delayed.times(KINDNESS.toLong()))
+        delay(delayed.times(KINDNESS.toLong()))
 
-       if(!solvedRound) {gameOver()}
+        if (!solvedRound) {
+            gameOver()
+        }
     }
 
 
@@ -118,10 +120,8 @@ fun RevealPad(
     FloatingActionButton(
         shape = CircleShape,
         onClick = {},
-        containerColor = if (element.instance != RIGHT) MaterialTheme.colorScheme.onPrimaryContainer.copy(
-            alpha = 0.9f
-        )
-        else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f)
+        containerColor = if (element.instance != RIGHT) MaterialTheme.colorScheme.inversePrimary
+        else MaterialTheme.colorScheme.inverseOnSurface
     ) {
 
     }
@@ -147,20 +147,20 @@ fun AskPad(
             }
         } else {
             Log.d("SERVICE_TAG", "MISSCLICK")
-             gameOver()
+            gameOver()
         }
         clicked = true
     }
     FloatingActionButton(
         shape = CircleShape,
         onClick = onClick,
-        containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+        containerColor = MaterialTheme.colorScheme.inverseOnSurface
 
     ) {
         Icon(
             imageVector = Icons.Default.Quiz,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.surface.copy(0.5f)
+            tint = MaterialTheme.colorScheme.inversePrimary
         )
     }
 }

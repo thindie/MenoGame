@@ -12,7 +12,7 @@ class GetUserInformationUseCase @Inject constructor(
     private val repository: DomainRepository,
     @DispatchersModule.IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke(isShowRecords: Boolean): Flow<List<Information>>{
+    suspend operator fun invoke(isShowRecords: Boolean): Flow<List<Information>> {
         return repository.getInformationScreen(isShowRecords).flowOn(ioDispatcher)
     }
 }
