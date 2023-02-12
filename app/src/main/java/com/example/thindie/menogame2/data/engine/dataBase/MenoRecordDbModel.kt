@@ -12,7 +12,7 @@ data class MenoRecordDbModel(
     val questionsAnswered: String,
     val gameTime: String,
     @PrimaryKey(autoGenerate = true)
-    val id: Int
+    val id: Int = 0
 )
 
 
@@ -30,6 +30,6 @@ fun PlayerRecord.map(): MenoRecordDbModel {
         this.playerName,
         score = this.scoreInformation,
         questionsAnswered = this.questionsQuota,
-        gameTime = this.timeInformation, id = 0
+        gameTime = this.timeInformation
     )
 }

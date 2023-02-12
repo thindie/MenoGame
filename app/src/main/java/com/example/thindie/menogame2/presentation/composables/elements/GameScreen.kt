@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
-private const val TO_WHOLE_TIME = 2
+private const val KINDNESS = 3
 private const val RIGHT = 0
 private const val COLUMNS_ARE = 4
 private const val MILLIS = 1000L
@@ -98,7 +98,7 @@ fun GameScreen(
          val delayed = time.times(MILLIS);
             delay(delayed)
         showQuestion = !showQuestion
-             delay(delayed.times(2.toLong()))
+             delay(delayed.times(KINDNESS.toLong()))
 
        if(!solvedRound) {gameOver()}
     }

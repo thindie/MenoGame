@@ -89,7 +89,7 @@ fun StartScreen(
                 ButtonStartScreen({ onMaster() }, description = "Im master")
                 ButtonStartScreen({ onNewGame() }, "New Game")
                 ButtonStartScreen({ onRecord()}, "Records")
-                ButtonStartScreen({}, "Exit")
+                ButtonStartScreen({ onExit() }, "Exit")
             }
 
 

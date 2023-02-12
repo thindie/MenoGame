@@ -32,41 +32,27 @@ class MenoGameDomainRepoImpl @Inject constructor(
 
     override suspend fun getPlayScreen(isNewGame: Boolean, isMaster: Boolean): GameRound {
         if (isNewGame) {
-             GameRoundBuilder.build(this, isMaster)
+            GameRoundBuilder.build(this, isMaster)
         }
         return gameRoundBuilder.generateQuestion().transform()
     }
 
 
     @SuppressLint("SuspiciousIndentation")
-    override suspend fun getInformationScreen(isShowRecords : Boolean): Flow<Information> {
-
-        playerRecord = gameRoundBuilder.buildResult(playerInit)
-            if (playerRecord.scoreInformation.toInt() > SCORE) {
-                try {
-                    menoRecordsDao.getRecords().forEach {
-                        if(it.name == playerRecord.playerName){
-                            if (it.score.toInt() <= playerRecord.scoreInformation.toInt()) {
-                                menoRecordsDao.deleteRecord(it.id)
-                                menoRecordsDao.saveRecord(playerRecord.map())
-                            }
-                        }
-                        else {menoRecordsDao.saveRecord(playerRecord.map())}
-                    }
-                } catch (e: Exception) {
-                    menoRecordsDao.saveRecord(playerRecord.map())
+    override suspend fun getInformationScreen(isShowRecords: Boolean): Flow<List<Information>> {
+        if (isShowRecords) {
+            return flow {
+                val mappedList = menoRecordsDao.getRecords().map {
+                    it.map()
                 }
-            }
-        if(isShowRecords){
-            return flow{
-                menoRecordsDao.getRecords().map {
-                    emit(it.map())
-                }
+                emit(mappedList)
             }
         }
 
+        playerRecord = gameRoundBuilder.buildResult(playerInit)
+        checkLegitRecord()
         return flow {
-            emit(playerRecord)
+            emit(listOf(playerRecord))
         }
     }
 
@@ -89,4 +75,20 @@ class MenoGameDomainRepoImpl @Inject constructor(
         }
     }
 
+    private suspend fun checkLegitRecord() {
+        if (playerRecord.scoreInformation.toInt() > SCORE) {
+            val list = menoRecordsDao.getRecords()
+            if (list.isNotEmpty()) {
+                list.forEach {
+                    if (it.name == playerRecord.playerName){
+                        if(playerRecord.scoreInformation.toInt() > it.score.toInt()){
+                            menoRecordsDao.deleteRecord(it.id)
+                        }
+                        else return
+                    }
+                }
+            }
+             menoRecordsDao.saveRecord(playerRecord.map())
+        }
+    }
 }

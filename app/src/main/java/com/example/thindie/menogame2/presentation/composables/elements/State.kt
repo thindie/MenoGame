@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.presentation.composables.elements
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,10 +46,11 @@ fun State(onExit: () -> Unit) {
                 onNewGame = { viewModel.onStartGame(false) },
                 onRecord = { viewModel.onShowRecord() },
                 onSavePlayer = { viewModel.onSavePlayer(it) },
-                onMaster = {viewModel.onStartGame(true)}
-            ) {onExit()}
+                onMaster = {viewModel.onStartGame(true)},
+                onExit = { Log.d("SERVICE_TAG", "ONEXIT"); onExit() }
+            )
         }
     }
 }
-private const val RECORDS = "Players with Score > 2000!: "
+private const val RECORDS = "  Players with awesome scores "
 private const val RESULT = "Your result is:  "

@@ -5,7 +5,6 @@ import com.example.thindie.menogame2.domain.entities.PlayerInit
 import com.example.thindie.menogame2.domain.entities.PlayerRecord
 
 
-
 private const val IN_MILLIS = 1000L
 private const val IS_FRESH = 15
 private const val IS_START = 30
@@ -23,7 +22,7 @@ private const val INITIAL = 1
 
 class GameRoundBuilder(private val domainRepository: DomainRepository, isMaster: Boolean) {
 
-    private val howLong : Long = if(!isMaster){
+    private val howLong: Long = if (!isMaster) {
         System.currentTimeMillis()
     } else System.currentTimeMillis().minus(IS_MASTER.times(IN_MILLIS))
 
@@ -63,6 +62,7 @@ class GameRoundBuilder(private val domainRepository: DomainRepository, isMaster:
                     howManyAnswers = questionPad.howManyAnswers()
                 )
             )
+            return questions.last()
         } else {
             _questions.add(
                 GameRoundModel(
@@ -76,7 +76,7 @@ class GameRoundBuilder(private val domainRepository: DomainRepository, isMaster:
         return questions.last().copy(shownScore = showScore.withCollectFromList())
     }
 
-    private fun Int.setAnswerTime() = run { this.div(TIME_DIVIDER).toLong() }
+    private fun Int.setAnswerTime() = run { (this.div(TIME_DIVIDER)).toLong() }
 
     private fun Int.withCollectFromList(): Int {
         return this.plus(_questions.collectScore())
@@ -85,7 +85,7 @@ class GameRoundBuilder(private val domainRepository: DomainRepository, isMaster:
     private fun List<Int>.checkAndAddAdditionalDifficulty(): List<Int> {
         if (levelNow() == IS_MASTER) {
             val gameFieldList = MutableList(this.size) { index ->
-                levelNow().plus(++addition).onDependedWillFill(index)
+                levelNow().plus(addition++.div(2)).onDependedWillFill(index)
             }
             return gameFieldList.toList()
         }
@@ -123,7 +123,7 @@ class GameRoundBuilder(private val domainRepository: DomainRepository, isMaster:
     }
 
     private fun Int.willIterateScore(score: Int): Int {
-        return this.times(score)
+        return this.times(score).minus(this)
     }
 
 

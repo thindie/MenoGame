@@ -69,9 +69,8 @@ class MainViewModel @Inject constructor(
     fun onShowRecord() {
         viewModelScope.launch {
             getUserData(true).collect {
-                val informationList = mutableListOf<Information>()
-                informationList.add(it)
-                _viewState.value = ViewState.onRecord(informationList)
+
+                _viewState.value = ViewState.onRecord(it)
             }
         }
     }
@@ -80,9 +79,8 @@ class MainViewModel @Inject constructor(
     fun onEndGame() {
         viewModelScope.launch {
             getUserData(false).collect {
-                val informationList = mutableListOf<Information>()
-                informationList.add(it)
-                _viewState.value = ViewState.onFinish(informationList)
+
+                _viewState.value = ViewState.onFinish(it)
             }
         }
 
