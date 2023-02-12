@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.data
 
+import android.annotation.SuppressLint
 import com.example.thindie.menogame2.data.engine.dataBase.MenoRecordsDao
 import com.example.thindie.menogame2.data.engine.dataBase.map
 import com.example.thindie.menogame2.data.engine.logic.GameRoundBuilder
@@ -14,38 +15,44 @@ import com.example.thindie.menogame2.domain.entities.abstractions.Information
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val UNNAMED = "unnamed"
-private const val SCORE = 800
+private const val SCORE = 2000
 
+@Singleton
 class MenoGameDomainRepoImpl @Inject constructor(
-    private val gameRoundBuilder: GameRoundBuilder,
-    private val menoRecordsDao: MenoRecordsDao,
-    private val nameDao: NameDao
+    private val menoRecordsDao: MenoRecordsDao, private val nameDao: NameDao
 ) : DomainRepository {
 
+    override lateinit var gameRoundBuilder: GameRoundBuilder
     private lateinit var playerInit: PlayerInit
     private lateinit var playerRecord: PlayerRecord
 
-    override suspend fun getPlayScreen(): GameRound =
-        gameRoundBuilder.generateQuestion().transform()
+
+    override suspend fun getPlayScreen(isNewGame: Boolean, isMaster: Boolean): GameRound {
+        if (isNewGame) {
+            GameRoundBuilder.build(this, isMaster)
+        }
+        return gameRoundBuilder.generateQuestion().transform()
+    }
 
 
-    override suspend fun getInformationScreen(): Flow<Information> {
-        playerRecord = gameRoundBuilder.buildResult(playerInit)
-            if (playerRecord.scoreInformation.toInt() > SCORE) {
-                val record: PlayerRecord = try {
-                    menoRecordsDao.getRecords().last().map()
-                } catch (e: NullPointerException) {
-                    playerRecord
+    @SuppressLint("SuspiciousIndentation")
+    override suspend fun getInformationScreen(isShowRecords: Boolean): Flow<List<Information>> {
+        if (isShowRecords) {
+            return flow {
+                val mappedList = menoRecordsDao.getRecords().map {
+                    it.map()
                 }
-
-                if (record.scoreInformation.toInt() <= playerRecord.scoreInformation.toInt()) {
-                    menoRecordsDao.saveRecord(playerRecord.map())
-                }
+                emit(mappedList)
             }
-         return flow {
-            emit(playerRecord)
+        }
+
+        playerRecord = gameRoundBuilder.buildResult(playerInit)
+        checkLegitRecord()
+        return flow {
+            emit(listOf(playerRecord))
         }
     }
 
@@ -68,4 +75,19 @@ class MenoGameDomainRepoImpl @Inject constructor(
         }
     }
 
+    private suspend fun checkLegitRecord() {
+        if (playerRecord.scoreInformation.toInt() > SCORE) {
+            val list = menoRecordsDao.getRecords()
+            if (list.isNotEmpty()) {
+                list.forEach {
+                    if (it.name == playerRecord.playerName) {
+                        if (playerRecord.scoreInformation.toInt() > it.score.toInt()) {
+                            menoRecordsDao.deleteRecord(it.id)
+                        } else return
+                    }
+                }
+            }
+            menoRecordsDao.saveRecord(playerRecord.map())
+        }
+    }
 }

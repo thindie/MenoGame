@@ -1,6 +1,6 @@
 package com.example.thindie.menogame2.presentation
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thindie.menogame2.domain.entities.GameRound
@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onStart() {
+    fun onStartScreen() {
         viewModelScope.launch {
             _viewState.value = ViewState.onStart(initNameUseCase())
         }
@@ -46,30 +46,43 @@ class MainViewModel @Inject constructor(
 
     fun onSolved() {
         viewModelScope.launch {
-            _viewState.value = ViewState.onGame(getPlayScreenUseCase())
+            _viewState.value = ViewState.onGame(getPlayScreenUseCase(false, false))
         }
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun onSavePlayer(name: String) {
         viewModelScope.launch {
-            sendUserData(PlayerInit(name))
+            val player = PlayerInit(name)
+            sendUserData(player)
+        }
+    }
+
+    fun onStartGame(isMaster: Boolean) {
+        viewModelScope.launch {
+            _viewState.value = ViewState.onGame(getPlayScreenUseCase(true, isMaster))
         }
     }
 
     fun onShowRecord() {
         viewModelScope.launch {
-            getUserData().collect {
-                val informationList = mutableListOf<Information>()
-                informationList.add(it)
-                _viewState.value = ViewState.onRecord(informationList)
+            getUserData(true).collect {
+
+                _viewState.value = ViewState.onRecord(it)
             }
         }
     }
 
 
     fun onEndGame() {
-        Log.d("SERVICE_TAG", "GAME OVER")
+        viewModelScope.launch {
+            getUserData(false).collect {
+
+                _viewState.value = ViewState.onFinish(it)
+            }
+        }
+
     }
 
     sealed class ViewState {
@@ -77,7 +90,7 @@ class MainViewModel @Inject constructor(
         data class onLoading(val timing: Long) : ViewState()
         data class onRecord(val information: List<Information>) : ViewState()
         data class onStart(val playerName: String?) : ViewState()
-        object onFinish : ViewState()
+        data class onFinish(val information: List<Information>) : ViewState()
         object onError : ViewState()
     }
 

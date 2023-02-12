@@ -27,6 +27,7 @@ fun StartScreen(
     modifier: Modifier = Modifier,
     name: String?,
     onNewGame: () -> Unit,
+    onMaster: () -> Unit,
     onSavePlayer: (String) -> Unit,
     onRecord: () -> Unit,
     onExit: () -> Unit
@@ -75,6 +76,7 @@ fun StartScreen(
                 })
             if (textFieldState != "" || labelState != "") {
                 if (labelState != "") {
+                    onSavePlayer(labelState)
                     Text(
                         text = labelState,
                         style = MaterialTheme.typography.displaySmall,
@@ -84,9 +86,10 @@ fun StartScreen(
                 Spacer(modifier = modifier.weight(0.3f))
                 Animate()
                 Spacer(modifier = modifier.weight(0.3f))
+                ButtonStartScreen({ onMaster() }, description = "I'm master")
                 ButtonStartScreen({ onNewGame() }, "New Game")
-                ButtonStartScreen({}, "Records")
-                ButtonStartScreen({}, "Exit")
+                ButtonStartScreen({ onRecord() }, "Records")
+                ButtonStartScreen({ onExit() }, "Exit")
             }
 
 
@@ -105,7 +108,7 @@ fun ButtonStartScreen(onClick: () -> Unit, description: String) {
             .width(260.dp)
             .height(50.dp),
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f),
+            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onSurface
         )
 
@@ -121,8 +124,8 @@ fun Animate() {
 
 
     with(MaterialTheme.colorScheme) {
-        list.add(onSurface)
-        list.add(onSurfaceVariant)
+        list.add(inversePrimary)
+        list.add(primaryContainer)
         list.add(inverseOnSurface)
         list.add(onPrimary)
         list.add(onError)

@@ -1,5 +1,6 @@
 package com.example.thindie.menogame2.presentation.composables.elements
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,11 +19,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
-private const val TO_WHOLE_TIME = 2
+private const val KINDNESS = 3
 private const val RIGHT = 0
 private const val COLUMNS_ARE = 4
 private const val MILLIS = 1000L
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun GameScreen(
     time: Long,
@@ -30,6 +32,7 @@ fun GameScreen(
     answersNeeded: Int,
     shownList: List<Int>,
     gameOver: () -> Unit,
+    onClickBack: () -> Unit,
     roundSolved: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -40,7 +43,7 @@ fun GameScreen(
 
 
 
-    if (rightClicks == answersNeeded - 1) {
+    if (rightClicks == answersNeeded) {
         solvedRound = !solvedRound
         roundSolved()
         rightClicks = RIGHT
@@ -58,7 +61,7 @@ fun GameScreen(
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 16.dp)
             ) {
-                IconButton(onClick = { gameOver() }) {
+                IconButton(onClick = { onClickBack() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = "",
@@ -85,24 +88,21 @@ fun GameScreen(
                     if (showQuestion)
                         RevealPad(element = UiGameElement(it, time))
                     else AskPad(element = UiGameElement(it, time),
-                        iterateClicks = { rightClicks++ }) {
-                        gameOver()
-                    }
+                        iterateClicks = { rightClicks++ }, gameOver = { gameOver() })
                 }
             }
         }
     }
 
     LaunchedEffect(solvedRound) {
-        var ticker = time.times(TO_WHOLE_TIME)
-        do {
-            if (ticker == time) {
-                showQuestion = !showQuestion
-            }
-            delay(MILLIS)
-            ticker--
-        } while (ticker > RIGHT)
-        gameOver()
+        val delayed = time.times(MILLIS);
+        delay(delayed)
+        showQuestion = !showQuestion
+        delay(delayed.times(KINDNESS.toLong()))
+
+        if (!solvedRound) {
+            gameOver()
+        }
     }
 
 
@@ -120,10 +120,8 @@ fun RevealPad(
     FloatingActionButton(
         shape = CircleShape,
         onClick = {},
-        containerColor = if (element.instance != RIGHT) MaterialTheme.colorScheme.onPrimaryContainer.copy(
-            alpha = 0.9f
-        )
-        else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.9f)
+        containerColor = if (element.instance != RIGHT) MaterialTheme.colorScheme.inversePrimary
+        else MaterialTheme.colorScheme.inverseOnSurface
     ) {
 
     }
@@ -141,25 +139,28 @@ fun AskPad(
     val onClick: () -> Unit = {
         if (!clicked) {
             if (element.instance == RIGHT) {
-                iterateClicks(); clicked = true
+                Log.d("SERVICE_TAG", "RIGHT_CLICK")
+                iterateClicks();
             } else {
                 gameOver()
                 Log.d("SERVICE_TAG", "MISSCLICK")
             }
         } else {
+            Log.d("SERVICE_TAG", "MISSCLICK")
             gameOver()
         }
+        clicked = true
     }
     FloatingActionButton(
         shape = CircleShape,
         onClick = onClick,
-        containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+        containerColor = MaterialTheme.colorScheme.inverseOnSurface
 
     ) {
         Icon(
             imageVector = Icons.Default.Quiz,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.surface.copy(0.5f)
+            tint = MaterialTheme.colorScheme.inversePrimary
         )
     }
 }
