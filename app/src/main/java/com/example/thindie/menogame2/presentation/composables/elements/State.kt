@@ -9,7 +9,7 @@ import com.example.thindie.menogame2.presentation.MainViewModel.ViewState.*
 
 
 @Composable
-fun State() {
+fun State(onExit: () -> Unit) {
     val viewModel: MainViewModel = viewModel()
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
@@ -22,7 +22,7 @@ fun State() {
                 answersNeeded = screen.howManyRightAnswers,
                 gameOver = { viewModel.onEndGame() },
                 roundSolved = { viewModel.onSolved() },
-                onClickBack = { viewModel.onStartScreen()},
+                onClickBack = { viewModel.onStartScreen() },
                 score = screen.shownScore
             )
         }
@@ -33,21 +33,22 @@ fun State() {
         is onError -> {}
         is onRecord -> {
             val information = (viewState as onRecord).information
-            RecordScreen(information){viewModel.onStartScreen()}
+            RecordScreen(information, message = RECORDS) { viewModel.onStartScreen() }
         }
         is onFinish -> {
             val information = (viewState as onFinish).information
-           ResultScreen(onClickBack = {}, onClickRecord = {}, information = information)
+            RecordScreen(information, message = RESULT) { viewModel.onStartScreen() }
         }
         is onStart -> {
             StartScreen(
                 name = (viewState as onStart).playerName,
-                onNewGame = { viewModel.onStartGame() },
+                onNewGame = { viewModel.onStartGame(false) },
                 onRecord = { viewModel.onShowRecord() },
-                onSavePlayer = { viewModel.onSavePlayer(it) }
-            ) {}
+                onSavePlayer = { viewModel.onSavePlayer(it) },
+                onMaster = {viewModel.onStartGame(true)}
+            ) {onExit()}
         }
     }
 }
-
-
+private const val RECORDS = "Players with Score > 2000!: "
+private const val RESULT = "Your result is:  "

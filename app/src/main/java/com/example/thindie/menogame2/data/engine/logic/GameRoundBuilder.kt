@@ -21,15 +21,17 @@ private const val TIME_DIVIDER = 15
 private const val INITIAL = 1
 
 
-class GameRoundBuilder(private val domainRepository: DomainRepository) {
+class GameRoundBuilder(private val domainRepository: DomainRepository, isMaster: Boolean) {
 
-    private val howLong = System.currentTimeMillis()
+    private val howLong : Long = if(!isMaster){
+        System.currentTimeMillis()
+    } else System.currentTimeMillis().minus(IS_MASTER.times(IN_MILLIS))
+
     private val gameTimes = listOf(IS_FRESH, IS_START, IS_SIGNIFICANT, IS_MASTER)
     private val _questions = mutableListOf<GameRoundModel>()
     val questions: List<GameRoundModel>
         get() = _questions.toList()
     private var addition = INITIAL
-
 
     fun buildResult(playerInit: PlayerInit): PlayerRecord {
         return playerInit.onEndGame()
@@ -140,8 +142,8 @@ class GameRoundBuilder(private val domainRepository: DomainRepository) {
     }
 
     companion object {
-        fun build(domainRepository: DomainRepository) {
-            domainRepository.gameRoundBuilder = GameRoundBuilder(domainRepository)
+        fun build(domainRepository: DomainRepository, isMaster: Boolean) {
+            domainRepository.gameRoundBuilder = GameRoundBuilder(domainRepository, isMaster)
         }
     }
 

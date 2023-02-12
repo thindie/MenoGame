@@ -29,13 +29,10 @@ class MenoGameDomainRepoImpl @Inject constructor(
     private lateinit var playerInit: PlayerInit
     private lateinit var playerRecord: PlayerRecord
 
-    init {
-        GameRoundBuilder.build(this)
-    }
 
-    override suspend fun getPlayScreen(isNewGame: Boolean): GameRound {
+    override suspend fun getPlayScreen(isNewGame: Boolean, isMaster: Boolean): GameRound {
         if (isNewGame) {
-             GameRoundBuilder.build(this)
+             GameRoundBuilder.build(this, isMaster)
         }
         return gameRoundBuilder.generateQuestion().transform()
     }
@@ -47,10 +44,15 @@ class MenoGameDomainRepoImpl @Inject constructor(
         playerRecord = gameRoundBuilder.buildResult(playerInit)
             if (playerRecord.scoreInformation.toInt() > SCORE) {
                 try {
-                     val record: PlayerRecord = menoRecordsDao.getRecords().last().map()
-                        if (record.scoreInformation.toInt() <= playerRecord.scoreInformation.toInt()) {
-                            menoRecordsDao.saveRecord(playerRecord.map())
+                    menoRecordsDao.getRecords().forEach {
+                        if(it.name == playerRecord.playerName){
+                            if (it.score.toInt() <= playerRecord.scoreInformation.toInt()) {
+                                menoRecordsDao.deleteRecord(it.id)
+                                menoRecordsDao.saveRecord(playerRecord.map())
+                            }
                         }
+                        else {menoRecordsDao.saveRecord(playerRecord.map())}
+                    }
                 } catch (e: Exception) {
                     menoRecordsDao.saveRecord(playerRecord.map())
                 }

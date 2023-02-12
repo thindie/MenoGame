@@ -5,6 +5,7 @@ import com.example.thindie.menogame2.domain.entities.GameRound
 import javax.inject.Inject
 
 class GetPlayScreenUseCase @Inject constructor(private val domainRepository: DomainRepository) {
-    suspend operator fun invoke(isNewGame: Boolean): GameRound = domainRepository.getPlayScreen(isNewGame)
+    suspend operator fun invoke(isNewGame: Boolean, isMaster: Boolean): GameRound =
+        domainRepository.getPlayScreen(isNewGame, isMaster)
 
 }

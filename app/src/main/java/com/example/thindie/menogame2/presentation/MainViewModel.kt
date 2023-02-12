@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(
 
     fun onSolved() {
         viewModelScope.launch {
-            _viewState.value = ViewState.onGame(getPlayScreenUseCase(false))
+            _viewState.value = ViewState.onGame(getPlayScreenUseCase(false, false))
         }
     }
 
@@ -60,9 +60,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onStartGame(){
+    fun onStartGame(isMaster: Boolean){
         viewModelScope.launch {
-            _viewState.value = ViewState.onGame(getPlayScreenUseCase(true))
+            _viewState.value = ViewState.onGame(getPlayScreenUseCase(true, isMaster))
         }
     }
 

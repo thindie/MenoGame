@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         setContent {
             MenoGame2Theme {
-                State()
+                State { this@MainActivity.onDestroy() }
             }
         }
 

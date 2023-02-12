@@ -27,6 +27,7 @@ fun StartScreen(
     modifier: Modifier = Modifier,
     name: String?,
     onNewGame: () -> Unit,
+    onMaster: () -> Unit,
     onSavePlayer: (String) -> Unit,
     onRecord: () -> Unit,
     onExit: () -> Unit
@@ -85,6 +86,7 @@ fun StartScreen(
                 Spacer(modifier = modifier.weight(0.3f))
                 Animate()
                 Spacer(modifier = modifier.weight(0.3f))
+                ButtonStartScreen({ onMaster() }, description = "Im master")
                 ButtonStartScreen({ onNewGame() }, "New Game")
                 ButtonStartScreen({ onRecord()}, "Records")
                 ButtonStartScreen({}, "Exit")

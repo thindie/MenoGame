@@ -30,6 +30,6 @@ fun PlayerRecord.map(): MenoRecordDbModel {
         this.playerName,
         score = this.scoreInformation,
         questionsAnswered = this.questionsQuota,
-        gameTime = this.timeInformation, id = 1
+        gameTime = this.timeInformation, id = 0
     )
 }
